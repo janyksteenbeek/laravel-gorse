@@ -40,7 +40,16 @@ Add the following environment variables to your `.env` file:
 ```env
 GORSE_API_KEY=your-api-key
 GORSE_ENDPOINT=http://your-gorse-instance:8087
+
+# Optional: Disable SSL verification for development/self-signed certificates
+GORSE_VERIFY_SSL=false
 ```
+
+### SSL Verification
+
+By default, SSL certificate verification is enabled for security. However, in development environments or when using self-signed certificates, you may need to disable it. You can do this by setting `GORSE_VERIFY_SSL=false` in your `.env` file.
+
+> **Note:** It's recommended to keep SSL verification enabled in production environments.
 
 ## Usage
 

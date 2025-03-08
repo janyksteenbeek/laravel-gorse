@@ -25,6 +25,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | SSL Verification
+    |--------------------------------------------------------------------------
+    |
+    | For development environments or when using self-signed certificates,
+    | you may want to disable SSL certificate verification. 
+    | It's recommended to keep this enabled in production.
+    |
+    */
+    'verify_ssl' => env('GORSE_VERIFY_SSL', true),
+
+    /*
+    |--------------------------------------------------------------------------
     | Auto-Sync Settings
     |--------------------------------------------------------------------------
     |
@@ -32,7 +44,7 @@ return [
     |
     */
     'auto_sync' => [
-        'enabled' => true,
+        'enabled' => env('GORSE_AUTO_SYNC', false),
         'user_fields' => [
             'labels' => [], // Additional user fields to sync as labels
         ],

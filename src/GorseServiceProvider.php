@@ -24,7 +24,8 @@ class GorseServiceProvider extends ServiceProvider
 
             return new GorseClient(
                 $config['endpoint'],
-                $config['api_key']
+                $config['api_key'],
+                $config['verify_ssl'] ?? true
             );
         });
 

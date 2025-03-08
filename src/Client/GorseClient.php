@@ -13,12 +13,17 @@ class GorseClient
 
     public function __construct(
         string $endpoint,
-        string $apiKey
+        string $apiKey,
+        bool $verifySSL = true
     ) {
         $this->client = Http::baseUrl($endpoint)
             ->withHeaders(['X-API-Key' => $apiKey])
             ->acceptJson()
             ->asJson();
+
+        if (!$verifySSL) {
+            $this->client->withoutVerifying();
+        }
     }
 
     /**

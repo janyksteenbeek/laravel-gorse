@@ -21,8 +21,7 @@
         "illuminate/support": "^11.0|^12.0",
         "illuminate/database": "^11.0|^12.0",
         "illuminate/console": "^11.0|^12.0",
-        "illuminate/http": "^11.0|^12.0",
-        "gorse/php-gorse": "^0.4.0"
+        "illuminate/http": "^11.0|^12.0"
     },
     "extra": {
         "laravel": {

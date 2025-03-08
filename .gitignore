@@ -1,0 +1,6 @@
+composer.lock
+vendor/
+.env
+.DS_Store
+.idea/
+.vscode/

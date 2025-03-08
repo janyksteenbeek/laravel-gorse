@@ -19,18 +19,17 @@ trait HasGorseRecommendations
     /**
      * Get the labels for this user in Gorse.
      */
-    public function getGorseLabels(): array
+    protected function gorseLabels(): array
     {
-        $labels = [];
-        $configuredFields = config('gorse.auto_sync.user_fields.labels', []);
+        return [self::class];
+    }
 
-        foreach ($configuredFields as $field) {
-            if (isset($this->{$field})) {
-                $labels[] = $this->{$field};
-            }
-        }
-
-        return $labels;
+    /**
+     * Get the ID that will be used to identify this model in Gorse.
+     */
+    protected function getGorseItemId(): string
+    {
+        return (string) $this->getKey();
     }
 
     /**
@@ -38,7 +37,7 @@ trait HasGorseRecommendations
      */
     public function syncWithGorse(): int
     {
-        return Gorse::syncUser($this, $this->getGorseLabels());
+        return Gorse::syncUser($this, $this->gorseLabels());
     }
 
     /**
@@ -46,7 +45,7 @@ trait HasGorseRecommendations
      */
     public function getRecommendations(int $number = 10): array
     {
-        return Gorse::getRecommendations((string) $this->getKey(), $number);
+        return Gorse::getRecommendations($this->getGorseItemId(), $number);
     }
 
     /**
@@ -54,6 +53,6 @@ trait HasGorseRecommendations
      */
     public function addFeedback(string $type, string $itemId, ?DateTime $timestamp = null): int
     {
-        return Gorse::insertFeedback($type, (string) $this->getKey(), $itemId, $timestamp);
+        return Gorse::insertFeedback($type, $this->getGorseItemId(), $itemId, $timestamp);
     }
 } 

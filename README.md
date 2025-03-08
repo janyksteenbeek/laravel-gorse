@@ -87,6 +87,11 @@ use JanykSteenbeek\LaravelGorse\Traits\HasGorseRecommendations;
 class User extends Model
 {
     use HasGorseRecommendations;
+
+    protected function gorseLabels(): array
+    {
+        return [self::class, $this->country];
+    }
 }
 ```
 

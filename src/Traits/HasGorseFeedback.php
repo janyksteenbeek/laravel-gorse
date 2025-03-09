@@ -19,15 +19,6 @@ trait HasGorseFeedback
     }
 
     /**
-     * Get the categories for this model in Gorse.
-     * Override this method to provide custom categories.
-     */
-    protected function gorseCategories(): array
-    {
-        return [static::class];
-    }
-
-    /**
      * Get the labels for this model in Gorse.
      * Override this method to provide custom labels.
      */
@@ -52,6 +43,15 @@ trait HasGorseFeedback
     protected function gorseTimestamp(): ?DateTime
     {
         return $this->updated_at;
+    }
+
+    /**
+     * Get the categories for this model in Gorse.
+     * Override this method to provide custom categories.
+     */
+    protected function gorseCategories(): array
+    {
+        return [static::class];
     }
 
     /**

@@ -14,8 +14,6 @@ trait Gorseable
         return static::class.':'.$this->getKey();
     }
 
-    abstract protected function gorseCategories(): array;
-
     /**
      * Get the labels for this model in Gorse.
      * Override this method to provide custom labels.

@@ -2,7 +2,7 @@
 
 namespace JanykSteenbeek\LaravelGorse\Traits;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 trait ResolvesRecommendations
 {

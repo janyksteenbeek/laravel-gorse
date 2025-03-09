@@ -3,10 +3,9 @@
 namespace JanykSteenbeek\LaravelGorse\Services;
 
 use DateTime;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use JanykSteenbeek\LaravelGorse\Client\GorseClient;
-use JanykSteenbeek\LaravelGorse\Traits\Gorseable;
 use JanykSteenbeek\LaravelGorse\Traits\ResolvesRecommendations;
 
 class GorseService
@@ -91,7 +90,7 @@ class GorseService
     /**
      * Get recommendations for a user.
      */
-    public function getRecommendations(string $userId, int $number = 10): Collection
+    public function getRecommendations(string $userId, int $number = 10): Collection|EloquentCollection
     {
         $recommendations = collect($this->client->getRecommendations($userId, $number));
 

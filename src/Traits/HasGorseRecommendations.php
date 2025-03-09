@@ -9,7 +9,7 @@ use JanykSteenbeek\LaravelGorse\Observers\GorseRecommendationObserver;
 
 trait HasGorseRecommendations
 {
-    use Gorseable;
+    use Gorseable, ResolvesRecommendations;
 
     /**
      * Boot the trait.
@@ -127,26 +127,5 @@ trait HasGorseRecommendations
         }
 
         return Gorse::insertFeedback($type, $this->gorseItemId(), $item, $timestamp);
-    }
-
-    /**
-     * Resolve recommendations into model instances.
-     */
-    protected function resolveRecommendations(array $recommendations): Collection
-    {
-        return collect($recommendations)
-            ->mapToGroups(function ($itemId) {
-                $modelClass = static::getModelFromGorseId($itemId);
-                $id = static::getIdFromGorseId($itemId);
-
-                return [$modelClass => $id];
-            })
-            ->filter(fn ($ids, $modelClass) => $modelClass !== null)
-            ->map(function ($ids, $modelClass) {
-                return (new $modelClass)->whereIn((new $modelClass)->getKeyName(), $ids)->get();
-            })
-            ->reduce(function (Collection $carry, Collection $models) {
-                return $carry->merge($models);
-            }, new Collection);
     }
 }

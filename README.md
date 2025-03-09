@@ -176,7 +176,7 @@ $recommendations = Gorse::getRecommendations($userId, 10);
 $recommendations = Gorse::getCategoryRecommendations($userId, 'electronics', 10);
 
 // Get popular items
-$recommendations = Gorse::getPopularItems(10, $userId);
+W
 
 // Get popular items in category
 $recommendations = Gorse::getPopularItemsByCategory('electronics', 10, $userId);

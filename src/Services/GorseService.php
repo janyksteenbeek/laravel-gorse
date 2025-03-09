@@ -3,11 +3,16 @@
 namespace JanykSteenbeek\LaravelGorse\Services;
 
 use DateTime;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use JanykSteenbeek\LaravelGorse\Client\GorseClient;
+use JanykSteenbeek\LaravelGorse\Traits\Gorseable;
+use JanykSteenbeek\LaravelGorse\Traits\ResolvesRecommendations;
 
 class GorseService
 {
+    use Gorseable, ResolvesRecommendations;
+
     public function __construct(
         protected GorseClient $client
     ) {}
@@ -66,56 +71,70 @@ class GorseService
     /**
      * Get recommendations for a user.
      */
-    public function getRecommendations(string $userId, int $number = 10): array
+    public function getRecommendations(string $userId, int $number = 10): Collection
     {
-        return $this->client->getRecommendations($userId, $number);
+        $recommendations = $this->client->getRecommendations($userId, $number);
+
+        return $this->resolveRecommendations($recommendations);
     }
 
     /**
      * Get category-specific recommendations for a user.
      */
-    public function getCategoryRecommendations(string $userId, string $category, int $number = 10): array
+    public function getCategoryRecommendations(string $userId, string $category, int $number = 10): Collection
     {
-        return $this->client->getCategoryRecommendations($userId, $category, $number);
+        $recommendations = $this->client->getCategoryRecommendations($userId, $category, $number);
+
+        return $this->resolveRecommendations($recommendations);
     }
 
     /**
      * Get popular items.
      */
-    public function getPopularItems(int $number = 10, ?string $userId = null): array
+    public function getPopularItems(int $number = 10, ?string $userId = null): Collection
     {
-        return $this->client->getPopularItems($number, $userId);
+        $recommendations = $this->client->getPopularItems($number, $userId);
+
+        return $this->resolveRecommendations($recommendations);
     }
 
     /**
      * Get popular items in a specific category.
      */
-    public function getPopularItemsByCategory(string $category, int $number = 10, ?string $userId = null): array
+    public function getPopularItemsByCategory(string $category, int $number = 10, ?string $userId = null): Collection
     {
-        return $this->client->getPopularItemsByCategory($category, $number, $userId);
+        $recommendations = $this->client->getPopularItemsByCategory($category, $number, $userId);
+
+        return $this->resolveRecommendations($recommendations);
     }
 
     /**
      * Get session-based recommendations.
      */
-    public function getSessionRecommendations(array $feedback, int $number = 10): array
+    public function getSessionRecommendations(array $feedback, int $number = 10): Collection
     {
-        return $this->client->getSessionRecommendations($feedback, $number);
+        $recommendations = $this->client->getSessionRecommendations($feedback, $number);
+
+        return $this->resolveRecommendations($recommendations);
     }
 
     /**
      * Get category-specific session-based recommendations.
      */
-    public function getSessionCategoryRecommendations(string $category, array $feedback, int $number = 10): array
+    public function getSessionCategoryRecommendations(string $category, array $feedback, int $number = 10): Collection
     {
-        return $this->client->getSessionCategoryRecommendations($category, $feedback, $number);
+        $recommendations = $this->client->getSessionCategoryRecommendations($category, $feedback, $number);
+
+        return $this->resolveRecommendations($recommendations);
     }
 
     /**
      * Get similar users (neighbors) for a user.
      */
-    public function getUserNeighbors(string $userId, int $number = 10): array
+    public function getUserNeighbors(string $userId, int $number = 10): Collection
     {
-        return $this->client->getUserNeighbors($userId, $number);
+        $recommendations = $this->client->getUserNeighbors($userId, $number);
+
+        return $this->resolveRecommendations($recommendations);
     }
 }

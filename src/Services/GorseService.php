@@ -11,7 +11,7 @@ use JanykSteenbeek\LaravelGorse\Traits\ResolvesRecommendations;
 
 class GorseService
 {
-    use Gorseable, ResolvesRecommendations;
+    use ResolvesRecommendations;
 
     protected bool $shouldResolveModels = true;
 

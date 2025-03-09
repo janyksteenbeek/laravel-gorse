@@ -160,9 +160,7 @@ class GorseClient
      */
     public function getSessionRecommendations(array $feedback, int $number = 10): array
     {
-        return $this->client->post('/api/session/recommend', $feedback, [
-            'n' => $number,
-        ])
+        return $this->client->post('/api/session/recommend?'.http_build_query(['n' => $number]), $feedback)
             ->throw()
             ->json();
     }
@@ -172,9 +170,7 @@ class GorseClient
      */
     public function getSessionCategoryRecommendations(string $category, array $feedback, int $number = 10): array
     {
-        return $this->client->post("/api/session/recommend/{$category}", $feedback, [
-            'n' => $number,
-        ])
+        return $this->client->post("/api/session/recommend/{$category}?".http_build_query(['n' => $number]), $feedback)
             ->throw()
             ->json();
     }

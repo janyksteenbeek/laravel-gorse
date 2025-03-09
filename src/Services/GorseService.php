@@ -93,11 +93,11 @@ class GorseService
      */
     public function getRecommendations(string $userId, int $number = 10): Collection
     {
-        $recommendations = $this->client->getRecommendations($userId, $number);
+        $recommendations = collect($this->client->getRecommendations($userId, $number));
 
         return $this->shouldResolveModels
             ? $this->resolveRecommendations($recommendations)
-            : collect($recommendations);
+            : $recommendations;
     }
 
     /**
@@ -105,11 +105,11 @@ class GorseService
      */
     public function getCategoryRecommendations(string $userId, string $category, int $number = 10): Collection
     {
-        $recommendations = $this->client->getCategoryRecommendations($userId, $category, $number);
+        $recommendations = collect($this->client->getCategoryRecommendations($userId, $category, $number));
 
         return $this->shouldResolveModels
             ? $this->resolveRecommendations($recommendations)
-            : collect($recommendations);
+            : $recommendations;
     }
 
     /**
@@ -117,11 +117,11 @@ class GorseService
      */
     public function getPopularItems(int $number = 10, ?string $userId = null): Collection
     {
-        $recommendations = $this->client->getPopularItems($number, $userId);
+        $recommendations = collect($this->client->getPopularItems($number, $userId));
 
         return $this->shouldResolveModels
             ? $this->resolveRecommendations($recommendations)
-            : collect($recommendations);
+            : $recommendations;
     }
 
     /**
@@ -129,11 +129,11 @@ class GorseService
      */
     public function getPopularItemsByCategory(string $category, int $number = 10, ?string $userId = null): Collection
     {
-        $recommendations = $this->client->getPopularItemsByCategory($category, $number, $userId);
+        $recommendations = collect($this->client->getPopularItemsByCategory($category, $number, $userId));
 
         return $this->shouldResolveModels
             ? $this->resolveRecommendations($recommendations)
-            : collect($recommendations);
+            : $recommendations;
     }
 
     /**
@@ -141,11 +141,11 @@ class GorseService
      */
     public function getSessionRecommendations(array $feedback, int $number = 10): Collection
     {
-        $recommendations = $this->client->getSessionRecommendations($feedback, $number);
+        $recommendations = collect($this->client->getSessionRecommendations($feedback, $number));
 
         return $this->shouldResolveModels
             ? $this->resolveRecommendations($recommendations)
-            : collect($recommendations);
+            : $recommendations;
     }
 
     /**
@@ -153,11 +153,11 @@ class GorseService
      */
     public function getSessionCategoryRecommendations(string $category, array $feedback, int $number = 10): Collection
     {
-        $recommendations = $this->client->getSessionCategoryRecommendations($category, $feedback, $number);
+        $recommendations = collect($this->client->getSessionCategoryRecommendations($category, $feedback, $number));
 
         return $this->shouldResolveModels
             ? $this->resolveRecommendations($recommendations)
-            : collect($recommendations);
+            : $recommendations;
     }
 
     /**
@@ -165,10 +165,10 @@ class GorseService
      */
     public function getUserNeighbors(string $userId, int $number = 10): Collection
     {
-        $recommendations = $this->client->getUserNeighbors($userId, $number);
+        $recommendations = collect($this->client->getUserNeighbors($userId, $number));
 
         return $this->shouldResolveModels
             ? $this->resolveRecommendations($recommendations)
-            : collect($recommendations);
+            : $recommendations;
     }
 }

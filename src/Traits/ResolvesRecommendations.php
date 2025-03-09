@@ -9,9 +9,9 @@ trait ResolvesRecommendations
     /**
      * Resolve recommendations into model instances with scores.
      */
-    protected function resolveRecommendations(array $recommendations): Collection
+    protected function resolveRecommendations(Collection $recommendations): Collection
     {
-        return collect($recommendations)
+        return $recommendations
             ->mapToGroups(function ($recommendation) {
                 $modelClass = $this->getModelFromGorseId($recommendation['Id'] ?? $recommendation);
                 $id = $this->getIdFromGorseId($recommendation['Id'] ?? $recommendation);

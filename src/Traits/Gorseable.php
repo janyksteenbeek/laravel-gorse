@@ -6,8 +6,6 @@ use DateTime;
 
 trait Gorseable
 {
-    use HandlesGorseIds;
-
     /**
      * Get the ID that will be used to identify this model in Gorse.
      */

@@ -12,31 +12,33 @@ trait ResolvesRecommendations
     protected function resolveRecommendations(Collection $recommendations): Collection
     {
         return $recommendations
-            ->mapToGroups(function ($recommendation) {
+            ->map(function ($recommendation) {
                 $modelClass = $this->getModelFromGorseId($recommendation['Id'] ?? $recommendation);
                 $id = $this->getIdFromGorseId($recommendation['Id'] ?? $recommendation);
 
-                return [$modelClass => [
+                return [
+                    'modelClass' => $modelClass,
                     'id' => $id,
                     'score' => $recommendation['Score'] ?? 0,
-                ]];
+                ];
             })
-            ->filter(fn ($items, $modelClass) => $modelClass !== null)
-            ->map(function ($items, $modelClass) {
+            ->reject(fn ($item) => $item['modelClass'] === null)
+            ->groupBy('modelClass')
+            ->map(function ($items) {
+                $modelClass = $items->first()['modelClass'];
                 $models = (new $modelClass)
-                    ->whereIn((new $modelClass)->getKeyName(), collect($items)->pluck('id'))
+                    ->whereIn((new $modelClass)->getKeyName(), $items->pluck('id'))
                     ->get();
 
                 // Attach scores to the models
                 return $models->map(function ($model) use ($items) {
-                    $item = collect($items)->firstWhere('id', $model->getKey());
+                    $item = $items->firstWhere('id', $model->getKey());
                     $model->gorse_score = $item['score'];
                     return $model;
                 });
             })
-            ->reduce(function (Collection $carry, Collection $models) {
-                return $carry->merge($models);
-            }, new Collection);
+            ->values()
+            ->flatten();
     }
 
     /**

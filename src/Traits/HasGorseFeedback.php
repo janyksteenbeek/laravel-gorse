@@ -5,7 +5,7 @@ namespace JanykSteenbeek\LaravelGorse\Traits;
 use DateTime;
 use JanykSteenbeek\LaravelGorse\Facades\Gorse;
 use JanykSteenbeek\LaravelGorse\Observers\GorseObserver;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 trait HasGorseFeedback
 {

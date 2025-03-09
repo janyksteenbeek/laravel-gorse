@@ -3,7 +3,7 @@
 namespace JanykSteenbeek\LaravelGorse\Traits;
 
 use DateTime;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use JanykSteenbeek\LaravelGorse\Facades\Gorse;
 use JanykSteenbeek\LaravelGorse\Observers\GorseRecommendationObserver;
 

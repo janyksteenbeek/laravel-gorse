@@ -169,14 +169,26 @@ You can also use the Gorse facade directly:
 ```php
 use JanykSteenbeek\LaravelGorse\Facades\Gorse;
 
-// Get recommendations
+// Get recommendations (resolved to model instances)
 $recommendations = Gorse::getRecommendations($userId, 10);
+
+// Get raw recommendations without model resolution
+$rawRecommendations = Gorse::raw()->getRecommendations($userId, 10);
+// Returns a Collection of: [['Id' => 'Product:1', 'Score' => 0.95], ...]
+
+// All recommendation methods return Collections, making them Laravel-friendly
+$rawRecommendations->pluck('Score')->avg(); // Get average score
+$rawRecommendations->sortByDesc('Score'); // Sort by score
+$rawRecommendations->filter(fn ($item) => $item['Score'] > 0.5); // Filter by score
+
+// Or use resolveModels() to control resolution
+$rawRecommendations = Gorse::resolveModels(false)->getRecommendations($userId, 10);
 
 // Get category recommendations
 $recommendations = Gorse::getCategoryRecommendations($userId, 'electronics', 10);
 
 // Get popular items
-W
+$recommendations = Gorse::getPopularItems(10, $userId);
 
 // Get popular items in category
 $recommendations = Gorse::getPopularItemsByCategory('electronics', 10, $userId);
@@ -192,6 +204,32 @@ $recommendations = Gorse::getUserNeighbors($userId, 10);
 
 // Insert feedback
 Gorse::insertFeedback('like', $userId, $itemId);
+```
+
+All recommendation methods return Laravel Collections, regardless of whether model resolution is enabled. This means you can use all of Laravel's Collection methods on both resolved and raw results:
+
+```php
+// Raw response with scores (as Collection)
+$rawRecommendations = Gorse::raw()->getRecommendations($userId, 10);
+
+// Use Collection methods on raw results
+$highScoring = $rawRecommendations
+    ->filter(fn ($item) => $item['Score'] > 0.8)
+    ->sortByDesc('Score')
+    ->values();
+
+$averageScore = $rawRecommendations->pluck('Score')->avg();
+
+// Resolved to models with scores (as Collection)
+$recommendations = Gorse::getRecommendations($userId, 10);
+
+// Use Collection methods on resolved models
+$highScoring = $recommendations
+    ->filter(fn ($model) => $model->gorse_score > 0.8)
+    ->sortByDesc('gorse_score')
+    ->values();
+
+$averageScore = $recommendations->pluck('gorse_score')->avg();
 ```
 
 ## License

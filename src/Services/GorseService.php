@@ -13,9 +13,29 @@ class GorseService
 {
     use Gorseable, ResolvesRecommendations;
 
+    protected bool $shouldResolveModels = true;
+
     public function __construct(
         protected GorseClient $client
     ) {}
+
+    /**
+     * Set whether recommendations should be resolved to model instances.
+     */
+    public function resolveModels(bool $shouldResolve = true): self
+    {
+        $this->shouldResolveModels = $shouldResolve;
+
+        return $this;
+    }
+
+    /**
+     * Get raw recommendations without model resolution.
+     */
+    public function raw(): self
+    {
+        return $this->resolveModels(false);
+    }
 
     /**
      * Sync a user with Gorse.
@@ -75,7 +95,9 @@ class GorseService
     {
         $recommendations = $this->client->getRecommendations($userId, $number);
 
-        return $this->resolveRecommendations($recommendations);
+        return $this->shouldResolveModels
+            ? $this->resolveRecommendations($recommendations)
+            : collect($recommendations);
     }
 
     /**
@@ -85,7 +107,9 @@ class GorseService
     {
         $recommendations = $this->client->getCategoryRecommendations($userId, $category, $number);
 
-        return $this->resolveRecommendations($recommendations);
+        return $this->shouldResolveModels
+            ? $this->resolveRecommendations($recommendations)
+            : collect($recommendations);
     }
 
     /**
@@ -95,7 +119,9 @@ class GorseService
     {
         $recommendations = $this->client->getPopularItems($number, $userId);
 
-        return $this->resolveRecommendations($recommendations);
+        return $this->shouldResolveModels
+            ? $this->resolveRecommendations($recommendations)
+            : collect($recommendations);
     }
 
     /**
@@ -105,7 +131,9 @@ class GorseService
     {
         $recommendations = $this->client->getPopularItemsByCategory($category, $number, $userId);
 
-        return $this->resolveRecommendations($recommendations);
+        return $this->shouldResolveModels
+            ? $this->resolveRecommendations($recommendations)
+            : collect($recommendations);
     }
 
     /**
@@ -115,7 +143,9 @@ class GorseService
     {
         $recommendations = $this->client->getSessionRecommendations($feedback, $number);
 
-        return $this->resolveRecommendations($recommendations);
+        return $this->shouldResolveModels
+            ? $this->resolveRecommendations($recommendations)
+            : collect($recommendations);
     }
 
     /**
@@ -125,7 +155,9 @@ class GorseService
     {
         $recommendations = $this->client->getSessionCategoryRecommendations($category, $feedback, $number);
 
-        return $this->resolveRecommendations($recommendations);
+        return $this->shouldResolveModels
+            ? $this->resolveRecommendations($recommendations)
+            : collect($recommendations);
     }
 
     /**
@@ -135,6 +167,8 @@ class GorseService
     {
         $recommendations = $this->client->getUserNeighbors($userId, $number);
 
-        return $this->resolveRecommendations($recommendations);
+        return $this->shouldResolveModels
+            ? $this->resolveRecommendations($recommendations)
+            : collect($recommendations);
     }
 }

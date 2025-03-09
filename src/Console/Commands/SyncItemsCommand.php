@@ -4,9 +4,9 @@ namespace JanykSteenbeek\LaravelGorse\Console\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use JanykSteenbeek\LaravelGorse\Traits\HasGorseFeedback;
+
 use function Laravel\Prompts\progress;
 
 class SyncItemsCommand extends Command
@@ -30,6 +30,7 @@ class SyncItemsCommand extends Command
     {
         if (! $this->option('model')) {
             $this->error('Please provide a model class using --model option.');
+
             return self::FAILURE;
         }
 
@@ -44,6 +45,7 @@ class SyncItemsCommand extends Command
 
         if ($total === 0) {
             $this->info('No items found to sync.');
+
             return self::SUCCESS;
         }
 
@@ -56,13 +58,13 @@ class SyncItemsCommand extends Command
                 try {
                     $item->syncWithGorse();
                     $stats['processed']++;
-                    
-                    $progress->label("Syncing item {$item->getGorseItemId()}");
+
+                    $progress->label("Syncing item {$item->gorseItemId()}");
                 } catch (Exception $e) {
                     $stats['failed']++;
-                    $stats['errors'][] = "Error syncing item {$item->getGorseItemId()}: {$e->getMessage()}";
-                    
-                    $progress->label("Error syncing item {$item->getGorseItemId()}");
+                    $stats['errors'][] = "Error syncing item {$item->gorseItemId()}: {$e->getMessage()}";
+
+                    $progress->label("Error syncing item {$item->gorseItemId()}");
                 }
             },
             hint: 'This may take a while depending on the number of items.'
@@ -80,6 +82,7 @@ class SyncItemsCommand extends Command
 
         if (! class_exists($modelClass)) {
             $this->error("Model class {$modelClass} does not exist.");
+
             return null;
         }
 
@@ -92,6 +95,7 @@ class SyncItemsCommand extends Command
                 $modelClass,
                 HasGorseFeedback::class
             ));
+
             return null;
         }
 
@@ -117,7 +121,7 @@ class SyncItemsCommand extends Command
         if ($stats['failed'] > 0) {
             $this->error("Failed: {$stats['failed']}");
             $this->error('Errors encountered:');
-            
+
             foreach ($stats['errors'] as $error) {
                 $this->error("- {$error}");
             }
@@ -127,4 +131,4 @@ class SyncItemsCommand extends Command
 
         return self::SUCCESS;
     }
-} 
+}

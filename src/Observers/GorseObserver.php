@@ -3,8 +3,8 @@
 namespace JanykSteenbeek\LaravelGorse\Observers;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 use JanykSteenbeek\LaravelGorse\Services\GorseService;
-use JanykSteenbeek\LaravelGorse\Traits\HasGorseFeedback;
 
 class GorseObserver
 {
@@ -17,7 +17,9 @@ class GorseObserver
      */
     public function created(Model $model): void
     {
-        $model->syncWithGorse();
+        if (Config::get('gorse.auto_sync.enabled')) {
+            $model->syncWithGorse();
+        }
     }
 
     /**
@@ -25,7 +27,9 @@ class GorseObserver
      */
     public function updated(Model $model): void
     {
-        $model->syncWithGorse();
+        if (Config::get('gorse.auto_sync.enabled')) {
+            $model->syncWithGorse();
+        }
     }
 
     /**
@@ -33,6 +37,8 @@ class GorseObserver
      */
     public function deleted(Model $model): void
     {
-        $this->gorse->deleteItem((string) $model->getGorseItemId());
+        if (Config::get('gorse.auto_sync.enabled')) {
+            $this->gorse->deleteItem((string) $model->gorseItemId());
+        }
     }
-} 
+}

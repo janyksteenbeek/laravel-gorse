@@ -43,6 +43,12 @@ GORSE_ENDPOINT=http://your-gorse-instance:8087
 
 # Optional: Disable SSL verification for development/self-signed certificates
 GORSE_VERIFY_SSL=false
+
+# Optional: Enable automatic synchronization with Gorse
+GORSE_AUTO_SYNC=false
+
+# Optional: Enable automatic model resolving (default: true)
+GORSE_RESOLVING_ENABLED=true
 ```
 
 ### SSL Verification
@@ -102,8 +108,16 @@ class User extends Model
 $recommendations = $user->getRecommendations(10); // Get 10 recommendations
 
 // Record feedback
-$user->addFeedback('like', $product->getKey());
+$user->feedback('like', $product);
 ```
+
+### Auto-Sync
+
+The package supports automatic synchronization of your models with Gorse. When enabled, any changes to your models (create, update, delete) will be automatically synchronized with Gorse. You can enable this feature by setting `GORSE_AUTO_SYNC=true` in your `.env` file.
+
+### Model Resolving
+
+By default, when retrieving recommendations, the package will automatically resolve the recommended items into their respective Eloquent models. This means you'll get a collection of actual model instances instead of just IDs. You can disable this feature by setting `GORSE_RESOLVING_ENABLED=false` in your `.env` file.
 
 ### Manual Synchronization
 
@@ -111,11 +125,13 @@ The package provides commands to manually sync your data with Gorse:
 
 ```bash
 # Sync all users
-php artisan gorse:sync-users
+php artisan gorse:sync-users --model=App\\Models\\User --chunk=100
 
 # Sync all items
-php artisan gorse:sync-items
+php artisan gorse:sync-items --model=App\\Models\\Product --chunk=100
 ```
+
+The `--chunk` option allows you to specify how many records should be processed at once (default: 100).
 
 ### Using the Facade
 

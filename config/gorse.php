@@ -29,7 +29,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | For development environments or when using self-signed certificates,
-    | you may want to disable SSL certificate verification. 
+    | you may want to disable SSL certificate verification.
     | It's recommended to keep this enabled in production.
     |
     */
@@ -45,8 +45,18 @@ return [
     */
     'auto_sync' => [
         'enabled' => env('GORSE_AUTO_SYNC', false),
-        'user_fields' => [
-            'labels' => [], // Additional user fields to sync as labels
-        ],
     ],
-]; 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Resolving Settings
+    |--------------------------------------------------------------------------
+    |
+    | Configure whether the package should resolve Gorse models automatically
+    | when retrieving recommendations.
+    |
+    */
+    'resolving' => [
+        'enabled' => env('GORSE_RESOLVING_ENABLED', true),
+    ],
+];

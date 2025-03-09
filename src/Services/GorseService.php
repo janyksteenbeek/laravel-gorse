@@ -6,7 +6,7 @@ use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use JanykSteenbeek\LaravelGorse\Client\GorseClient;
 
-class GorseService 
+class GorseService
 {
     public function __construct(
         protected GorseClient $client
@@ -39,7 +39,7 @@ class GorseService
         ?DateTime $timestamp = null
     ): int {
         return $this->client->insertItem(
-            (string) $model->getGorseItemId(),
+            (string) $model->gorseItemId(),
             $categories,
             $labels,
             $isHidden,
@@ -70,4 +70,4 @@ class GorseService
     {
         return $this->client->getRecommendations($userId, $number);
     }
-} 
+}

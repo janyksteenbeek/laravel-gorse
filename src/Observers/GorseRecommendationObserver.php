@@ -3,6 +3,7 @@
 namespace JanykSteenbeek\LaravelGorse\Observers;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 use JanykSteenbeek\LaravelGorse\Services\GorseService;
 
 class GorseRecommendationObserver
@@ -16,7 +17,9 @@ class GorseRecommendationObserver
      */
     public function created(Model $model): void
     {
-        $model->syncWithGorse();
+        if (Config::get('gorse.auto_sync.enabled')) {
+            $model->syncWithGorse();
+        }
     }
 
     /**
@@ -24,7 +27,9 @@ class GorseRecommendationObserver
      */
     public function updated(Model $model): void
     {
-        $model->syncWithGorse();
+        if (Config::get('gorse.auto_sync.enabled')) {
+            $model->syncWithGorse();
+        }
     }
 
     /**
@@ -32,6 +37,8 @@ class GorseRecommendationObserver
      */
     public function deleted(Model $model): void
     {
-        $this->gorse->deleteUser((string) $model->getKey());
+        if (Config::get('gorse.auto_sync.enabled')) {
+            $this->gorse->deleteUser((string) $model->getKey());
+        }
     }
-} 
+}

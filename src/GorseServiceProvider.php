@@ -2,11 +2,11 @@
 
 namespace JanykSteenbeek\LaravelGorse;
 
+use Illuminate\Support\ServiceProvider;
 use JanykSteenbeek\LaravelGorse\Client\GorseClient;
 use JanykSteenbeek\LaravelGorse\Console\Commands\SyncItemsCommand;
 use JanykSteenbeek\LaravelGorse\Console\Commands\SyncUsersCommand;
 use JanykSteenbeek\LaravelGorse\Services\GorseService;
-use Illuminate\Support\ServiceProvider;
 
 class GorseServiceProvider extends ServiceProvider
 {
@@ -52,4 +52,4 @@ class GorseServiceProvider extends ServiceProvider
             ]);
         }
     }
-} 
+}

@@ -8,6 +8,8 @@ use JanykSteenbeek\LaravelGorse\Observers\GorseObserver;
 
 trait HasGorseFeedback
 {
+    use Gorseable;
+
     /**
      * Boot the trait.
      */
@@ -17,20 +19,12 @@ trait HasGorseFeedback
     }
 
     /**
-     * Get the ID that will be used to identify this model in Gorse.
-     */
-    public function getGorseItemId(): string|int
-    {
-        return $this->getKey();
-    }
-
-    /**
      * Get the categories for this model in Gorse.
      * Override this method to provide custom categories.
      */
     protected function gorseCategories(): array
     {
-        return [self::class];
+        return [static::class];
     }
 
     /**
@@ -75,10 +69,10 @@ trait HasGorseFeedback
     }
 
     /**
-     * Record feedback for this model from a user.
+     * Record feedback for this item from a user.
      */
-    public function receiveFeedback(string $type, string $userId, ?DateTime $timestamp = null): int
+    public function feedback(string $type, ?string $userId = null, ?DateTime $timestamp = null): int
     {
-        return Gorse::insertFeedback($type, $userId, (string) $this->getGorseItemId(), $timestamp);
+        return Gorse::insertFeedback($type, $userId, $this->gorseItemId(), $timestamp);
     }
-} 
+}

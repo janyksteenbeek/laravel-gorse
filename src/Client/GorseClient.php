@@ -21,7 +21,7 @@ class GorseClient
             ->acceptJson()
             ->asJson();
 
-        if (!$verifySSL) {
+        if (! $verifySSL) {
             $this->client->withoutVerifying();
         }
     }
@@ -124,4 +124,4 @@ class GorseClient
     {
         return $response->throw()->json('RowAffected', 0);
     }
-} 
+}

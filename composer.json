@@ -36,6 +36,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
-        "orchestra/testbench": "^10.1"
+        "orchestra/testbench": "^10.1",
+        "laravel/pint": "^1.21",
+        "phpstan/phpstan": "^2.1"
     }
 }

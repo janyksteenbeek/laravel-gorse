@@ -4,10 +4,10 @@ namespace JanykSteenbeek\LaravelGorse\Console\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use JanykSteenbeek\LaravelGorse\Traits\HasGorseRecommendations;
-use Symfony\Component\Console\Helper\ProgressBar;
+
+use function Laravel\Prompts\progress;
 
 class SyncUsersCommand extends Command
 {
@@ -34,14 +34,37 @@ class SyncUsersCommand extends Command
             return self::FAILURE;
         }
 
-        $total = $model->count();
+        $users = $model->query()->get();
+        $total = $users->count();
 
         if ($total === 0) {
             $this->info('No users found to sync.');
+
             return self::SUCCESS;
         }
 
-        return $this->syncUsers($model, $total);
+        $stats = ['processed' => 0, 'failed' => 0, 'errors' => []];
+
+        progress(
+            label: "Syncing {$total} users with Gorse",
+            steps: $users,
+            callback: function ($user, $progress) use (&$stats) {
+                try {
+                    $user->syncWithGorse();
+                    $stats['processed']++;
+
+                    $progress->label("Syncing user {$user->getKey()}");
+                } catch (Exception $e) {
+                    $stats['failed']++;
+                    $stats['errors'][] = "Error syncing user {$user->getKey()}: {$e->getMessage()}";
+
+                    $progress->label("Error syncing user {$user->getKey()}");
+                }
+            },
+            hint: 'This may take a while depending on the number of users.'
+        );
+
+        return $this->displayResults($stats);
     }
 
     /**
@@ -53,6 +76,7 @@ class SyncUsersCommand extends Command
 
         if (! class_exists($modelClass)) {
             $this->error("Model class {$modelClass} does not exist.");
+
             return null;
         }
 
@@ -65,6 +89,7 @@ class SyncUsersCommand extends Command
                 $modelClass,
                 HasGorseRecommendations::class
             ));
+
             return null;
         }
 
@@ -80,56 +105,6 @@ class SyncUsersCommand extends Command
     }
 
     /**
-     * Sync users with Gorse.
-     */
-    protected function syncUsers(Model $model, int $total): int
-    {
-        $this->info("Starting sync of {$total} users...");
-
-        $bar = $this->createProgressBar($total);
-        $stats = ['processed' => 0, 'failed' => 0, 'errors' => []];
-
-        $model->query()
-            ->chunkById($this->option('chunk'), function (Collection $users) use ($bar, &$stats) {
-                $this->processUserChunk($users, $bar, $stats);
-            });
-
-        $bar->finish();
-        $this->newLine(2);
-
-        return $this->displayResults($stats);
-    }
-
-    /**
-     * Process a chunk of users.
-     */
-    protected function processUserChunk(Collection $users, ProgressBar $bar, array &$stats): void
-    {
-        $users->each(function (Model $user) use ($bar, &$stats) {
-            try {
-                $user->syncWithGorse();
-                $stats['processed']++;
-            } catch (Exception $e) {
-                $stats['failed']++;
-                $stats['errors'][] = "Error syncing user {$user->getKey()}: {$e->getMessage()}";
-            }
-
-            $bar->advance();
-        });
-    }
-
-    /**
-     * Create a progress bar instance.
-     */
-    protected function createProgressBar(int $total): ProgressBar
-    {
-        $bar = $this->output->createProgressBar($total);
-        $bar->setFormat(' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%');
-
-        return $bar;
-    }
-
-    /**
      * Display the sync results.
      */
     protected function displayResults(array $stats): int
@@ -140,7 +115,7 @@ class SyncUsersCommand extends Command
         if ($stats['failed'] > 0) {
             $this->error("Failed: {$stats['failed']}");
             $this->error('Errors encountered:');
-            
+
             foreach ($stats['errors'] as $error) {
                 $this->error("- {$error}");
             }
@@ -150,4 +125,4 @@ class SyncUsersCommand extends Command
 
         return self::SUCCESS;
     }
-} 
+}

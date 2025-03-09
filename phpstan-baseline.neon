@@ -1,0 +1,43 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:gorseItemId\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: src/Console/Commands/SyncItemsCommand.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:syncWithGorse\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Console/Commands/SyncItemsCommand.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:syncWithGorse\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Console/Commands/SyncUsersCommand.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:gorseItemId\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Observers/GorseObserver.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:syncWithGorse\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: src/Observers/GorseObserver.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:syncWithGorse\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: src/Observers/GorseRecommendationObserver.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:gorseItemId\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Services/GorseService.php

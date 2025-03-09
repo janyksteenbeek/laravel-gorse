@@ -14,7 +14,7 @@ use JanykSteenbeek\LaravelGorse\Services\GorseService;
  * @method static int deleteItem(string $itemId)
  * @method static int insertFeedback(string $type, string $userId, string $itemId, ?DateTime $timestamp = null)
  * @method static array getRecommendations(string $userId, int $number = 10)
- * 
+ *
  * @see \JanykSteenbeek\LaravelGorse\Services\GorseService
  */
 class Gorse extends Facade
@@ -23,4 +23,4 @@ class Gorse extends Facade
     {
         return GorseService::class;
     }
-} 
+}

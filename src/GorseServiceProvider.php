@@ -31,7 +31,8 @@ class GorseServiceProvider extends ServiceProvider
 
         $this->app->singleton(GorseService::class, function ($app) {
             return new GorseService(
-                $app->make(GorseClient::class)
+                $app->make(GorseClient::class),
+                $app['config']['gorse']['resolving']['enabled'] ?? true
             );
         });
     }

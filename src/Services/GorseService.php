@@ -12,10 +12,9 @@ class GorseService
 {
     use ResolvesRecommendations;
 
-    protected bool $shouldResolveModels = true;
-
     public function __construct(
-        protected GorseClient $client
+        protected GorseClient $client,
+        protected bool $shouldResolveModels = true
     ) {}
 
     /**
@@ -90,7 +89,7 @@ class GorseService
     /**
      * Get recommendations for a user.
      */
-    public function getRecommendations(string $userId, int $number = 10): Collection|EloquentCollection
+    public function getRecommendations(string $userId, int $number = 10): Collection
     {
         $recommendations = collect($this->client->getRecommendations($userId, $number));
 

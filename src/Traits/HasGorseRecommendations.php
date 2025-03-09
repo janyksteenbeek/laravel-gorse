@@ -9,7 +9,7 @@ use JanykSteenbeek\LaravelGorse\Observers\GorseRecommendationObserver;
 
 trait HasGorseRecommendations
 {
-    use Gorseable, ResolvesRecommendations;
+    use Gorseable;
 
     /**
      * Boot the trait.
@@ -48,9 +48,7 @@ trait HasGorseRecommendations
      */
     public function recommendations(int $number = 10): Collection
     {
-        $recommendations = Gorse::getRecommendations($this->gorseItemId(), $number);
-
-        return $this->resolveRecommendations($recommendations);
+        return Gorse::getRecommendations($this->gorseItemId(), $number);
     }
 
     /**
@@ -58,9 +56,7 @@ trait HasGorseRecommendations
      */
     public function categoryRecommendations(string $category, int $number = 10): Collection
     {
-        $recommendations = Gorse::getCategoryRecommendations($this->gorseItemId(), $category, $number);
-
-        return $this->resolveRecommendations($recommendations);
+        return Gorse::getCategoryRecommendations($this->gorseItemId(), $category, $number);
     }
 
     /**
@@ -68,9 +64,7 @@ trait HasGorseRecommendations
      */
     public function popularItems(int $number = 10): Collection
     {
-        $recommendations = Gorse::getPopularItems($number, $this->gorseItemId());
-
-        return $this->resolveRecommendations($recommendations);
+        return Gorse::getPopularItems($number, $this->gorseItemId());
     }
 
     /**
@@ -78,9 +72,7 @@ trait HasGorseRecommendations
      */
     public function popularItemsByCategory(string $category, int $number = 10): Collection
     {
-        $recommendations = Gorse::getPopularItemsByCategory($category, $number, $this->gorseItemId());
-
-        return $this->resolveRecommendations($recommendations);
+        return Gorse::getPopularItemsByCategory($category, $number, $this->gorseItemId());
     }
 
     /**
@@ -88,9 +80,7 @@ trait HasGorseRecommendations
      */
     public function sessionRecommendations(array $feedback, int $number = 10): Collection
     {
-        $recommendations = Gorse::getSessionRecommendations($feedback, $number);
-
-        return $this->resolveRecommendations($recommendations);
+        return Gorse::getSessionRecommendations($feedback, $number);
     }
 
     /**
@@ -98,9 +88,7 @@ trait HasGorseRecommendations
      */
     public function sessionCategoryRecommendations(string $category, array $feedback, int $number = 10): Collection
     {
-        $recommendations = Gorse::getSessionCategoryRecommendations($category, $feedback, $number);
-
-        return $this->resolveRecommendations($recommendations);
+        return Gorse::getSessionCategoryRecommendations($category, $feedback, $number);
     }
 
     /**
@@ -108,9 +96,7 @@ trait HasGorseRecommendations
      */
     public function userNeighbors(int $number = 10): Collection
     {
-        $recommendations = Gorse::getUserNeighbors($this->gorseItemId(), $number);
-
-        return $this->resolveRecommendations($recommendations);
+        return Gorse::getUserNeighbors($this->gorseItemId(), $number);
     }
 
     /**

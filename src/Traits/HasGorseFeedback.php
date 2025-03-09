@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 trait HasGorseFeedback
 {
-    use Gorseable, ResolvesRecommendations;
+    use Gorseable;
 
     /**
      * Boot the trait.
@@ -82,8 +82,6 @@ trait HasGorseFeedback
      */
     public function neighbors(int $number = 10): Collection
     {
-        $recommendations = Gorse::getUserNeighbors($this->gorseItemId(), $number);
-
-        return $this->resolveRecommendations($recommendations);
+        return Gorse::getUserNeighbors($this->gorseItemId(), $number);
     }
 }

@@ -46,9 +46,69 @@ trait HasGorseRecommendations
     /**
      * Get recommendations for this user.
      */
-    public function getRecommendations(int $number = 10): Collection
+    public function recommendations(int $number = 10): Collection
     {
         $recommendations = Gorse::getRecommendations($this->gorseItemId(), $number);
+
+        return $this->resolveRecommendations($recommendations);
+    }
+
+    /**
+     * Get category-specific recommendations for this user.
+     */
+    public function categoryRecommendations(string $category, int $number = 10): Collection
+    {
+        $recommendations = Gorse::getCategoryRecommendations($this->gorseItemId(), $category, $number);
+
+        return $this->resolveRecommendations($recommendations);
+    }
+
+    /**
+     * Get popular items.
+     */
+    public function popularItems(int $number = 10): Collection
+    {
+        $recommendations = Gorse::getPopularItems($number, $this->gorseItemId());
+
+        return $this->resolveRecommendations($recommendations);
+    }
+
+    /**
+     * Get popular items in a specific category.
+     */
+    public function popularItemsByCategory(string $category, int $number = 10): Collection
+    {
+        $recommendations = Gorse::getPopularItemsByCategory($category, $number, $this->gorseItemId());
+
+        return $this->resolveRecommendations($recommendations);
+    }
+
+    /**
+     * Get session-based recommendations.
+     */
+    public function sessionRecommendations(array $feedback, int $number = 10): Collection
+    {
+        $recommendations = Gorse::getSessionRecommendations($feedback, $number);
+
+        return $this->resolveRecommendations($recommendations);
+    }
+
+    /**
+     * Get category-specific session-based recommendations.
+     */
+    public function sessionCategoryRecommendations(string $category, array $feedback, int $number = 10): Collection
+    {
+        $recommendations = Gorse::getSessionCategoryRecommendations($category, $feedback, $number);
+
+        return $this->resolveRecommendations($recommendations);
+    }
+
+    /**
+     * Get similar users (neighbors) for this user.
+     */
+    public function userNeighbors(int $number = 10): Collection
+    {
+        $recommendations = Gorse::getUserNeighbors($this->gorseItemId(), $number);
 
         return $this->resolveRecommendations($recommendations);
     }

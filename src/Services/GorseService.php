@@ -70,4 +70,52 @@ class GorseService
     {
         return $this->client->getRecommendations($userId, $number);
     }
+
+    /**
+     * Get category-specific recommendations for a user.
+     */
+    public function getCategoryRecommendations(string $userId, string $category, int $number = 10): array
+    {
+        return $this->client->getCategoryRecommendations($userId, $category, $number);
+    }
+
+    /**
+     * Get popular items.
+     */
+    public function getPopularItems(int $number = 10, ?string $userId = null): array
+    {
+        return $this->client->getPopularItems($number, $userId);
+    }
+
+    /**
+     * Get popular items in a specific category.
+     */
+    public function getPopularItemsByCategory(string $category, int $number = 10, ?string $userId = null): array
+    {
+        return $this->client->getPopularItemsByCategory($category, $number, $userId);
+    }
+
+    /**
+     * Get session-based recommendations.
+     */
+    public function getSessionRecommendations(array $feedback, int $number = 10): array
+    {
+        return $this->client->getSessionRecommendations($feedback, $number);
+    }
+
+    /**
+     * Get category-specific session-based recommendations.
+     */
+    public function getSessionCategoryRecommendations(string $category, array $feedback, int $number = 10): array
+    {
+        return $this->client->getSessionCategoryRecommendations($category, $feedback, $number);
+    }
+
+    /**
+     * Get similar users (neighbors) for a user.
+     */
+    public function getUserNeighbors(string $userId, int $number = 10): array
+    {
+        return $this->client->getUserNeighbors($userId, $number);
+    }
 }

@@ -105,10 +105,39 @@ class User extends Model
 
 ```php
 // Get recommendations for a user
-$recommendations = $user->getRecommendations(10); // Get 10 recommendations
+$recommendations = $user->recommendations(10); // Get 10 recommendations
+
+// Get category-specific recommendations
+$recommendations = $user->categoryRecommendations('electronics', 10);
+
+// Get popular items
+$recommendations = $user->popularItems(10);
+
+// Get popular items in a category
+$recommendations = $user->popularItemsByCategory('electronics', 10);
+
+// Get session-based recommendations
+$recommendations = $user->sessionRecommendations([
+    [
+        'FeedbackType' => 'click',
+        'ItemId' => 'product:123',
+        'Timestamp' => '2024-03-20T12:00:00Z'
+    ]
+], 10);
+
+// Get category-specific session recommendations
+$recommendations = $user->sessionCategoryRecommendations('electronics', [
+    [
+        'FeedbackType' => 'click',
+        'ItemId' => 'product:123'
+    ]
+], 10);
+
+// Get similar users (neighbors)
+$similarUsers = $user->userNeighbors(10);
 
 // Record feedback
-$user->feedback('like', $product);
+$user->feedback($product, 'like');
 ```
 
 ### Auto-Sync
@@ -142,6 +171,24 @@ use JanykSteenbeek\LaravelGorse\Facades\Gorse;
 
 // Get recommendations
 $recommendations = Gorse::getRecommendations($userId, 10);
+
+// Get category recommendations
+$recommendations = Gorse::getCategoryRecommendations($userId, 'electronics', 10);
+
+// Get popular items
+$recommendations = Gorse::getPopularItems(10, $userId);
+
+// Get popular items in category
+$recommendations = Gorse::getPopularItemsByCategory('electronics', 10, $userId);
+
+// Get session recommendations
+$recommendations = Gorse::getSessionRecommendations($feedback, 10);
+
+// Get session recommendations in category
+$recommendations = Gorse::getSessionCategoryRecommendations('electronics', $feedback, 10);
+
+// Get similar users
+$recommendations = Gorse::getUserNeighbors($userId, 10);
 
 // Insert feedback
 Gorse::insertFeedback('like', $userId, $itemId);

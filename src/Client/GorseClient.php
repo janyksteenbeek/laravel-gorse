@@ -118,6 +118,80 @@ class GorseClient
     }
 
     /**
+     * Get category-specific recommendations for a user.
+     */
+    public function getCategoryRecommendations(string $userId, string $category, int $number = 10): array
+    {
+        return $this->client->get("/api/recommend/{$userId}/{$category}", [
+            'number' => $number,
+        ])
+            ->throw()
+            ->json();
+    }
+
+    /**
+     * Get popular items.
+     */
+    public function getPopularItems(int $number = 10, ?string $userId = null): array
+    {
+        return $this->client->get('/api/popular', array_filter([
+            'n' => $number,
+            'user-id' => $userId,
+        ]))
+            ->throw()
+            ->json();
+    }
+
+    /**
+     * Get popular items in a specific category.
+     */
+    public function getPopularItemsByCategory(string $category, int $number = 10, ?string $userId = null): array
+    {
+        return $this->client->get("/api/popular/{$category}", array_filter([
+            'n' => $number,
+            'user-id' => $userId,
+        ]))
+            ->throw()
+            ->json();
+    }
+
+    /**
+     * Get session-based recommendations.
+     */
+    public function getSessionRecommendations(array $feedback, int $number = 10): array
+    {
+        return $this->client->post('/api/session/recommend', $feedback, [
+            'n' => $number,
+        ])
+            ->throw()
+            ->json();
+    }
+
+    /**
+     * Get category-specific session-based recommendations.
+     */
+    public function getSessionCategoryRecommendations(string $category, array $feedback, int $number = 10): array
+    {
+        return $this->client->post("/api/session/recommend/{$category}", $feedback, [
+            'n' => $number,
+        ])
+            ->throw()
+            ->json();
+    }
+
+    /**
+     * Get similar users (neighbors) for a user.
+     */
+    public function getUserNeighbors(string $userId, int $number = 10): array
+    {
+        return $this->client->get("/api/user/{$userId}/neighbors", [
+            'n' => $number,
+        ])
+            ->throw()
+            ->json();
+    }
+
+    /**
      * Get the number of rows affected from a response.
      */
     protected function getRowsAffected(Response $response): int
